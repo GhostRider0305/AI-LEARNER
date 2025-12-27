@@ -272,7 +272,9 @@ text-align: center;}
 
 /* Text link */
 .text-link {
-text-align: center;
+display: flex;
+align-items: center;
+justify-content: center;
   font-size: 0.9rem;
   color: #0ea5e9;
   text-decoration: none;
@@ -383,3 +385,4 @@ text-align: center;
     padding-inline: 1.5rem;
   }
 }
+
