@@ -31,6 +31,204 @@
 
   </section>
 
+  <section id="voice">
+       <div class="container">
+        <h1>My AI</h1>
+
+        <div class="mic-container">
+            <button id="micBtn">🎤</button>
+        </div>
+
+        <div id="status" class="status"></div>
+
+        <div id="chatDisplay" class="chat-display"></div>
+
+    </div>
+  </section>  
+
+    <script>
+        class VoiceAssistant {
+            constructor() {
+                this.recognition = null;
+                this.synthesis = window.speechSynthesis;
+                this.chatDisplay = document.getElementById('chatDisplay');
+                this.status = document.getElementById('status');
+                this.micBtn = document.getElementById('micBtn');
+                this.isListening = false;
+
+                // Website mappings
+                this.websites = {
+                    'chatgtp': 'https://chatgpt.com/',
+                    'perplexity': 'https://share.google/4GgjjZxplIdCj3Fov',
+                    'gemini': 'https://gemini.google.com/app?is_sa=1&is_sa=1&android-min-version=301356232&ios-min-version=322.0&campaign_id=bkws&utm_source=sem&utm_source=google&utm_medium=paid-media&utm_medium=cpc&utm_campaign=bkws&utm_campaign=2024enIN_gemfeb&pt=9008&mt=8&ct=p-growth-sem-bkws&gclsrc=aw.ds&gad_source=1&gad_campaignid=20357620749&gbraid=0AAAAApk5BhlTct_OE9sotBRRuq_cuR1Og&gclid=Cj0KCQiAgbnKBhDgARIsAGCDdlfSXMdgW0tq2_WjnQXYbjW4CN7YmdJubl8dQXDeZ-tu2tIydkdZJpEaAv8lEALw_wcB',
+                    'claude': 'https://share.google/CS7vIkcZ1CWkiOy6U',
+                    'study monkey': 'https://studymonkey.ai/subjects/physiology',
+                    'notebook lm': 'https://notebooklm.google.com/?icid=home_maincta&_gl=1*fokdqy*_ga*ODg4MDcwMDYxLjE3NjY3NzI0OTc.*_ga_W0LDH41ZCB*czE3NjY3NzI0OTYkbzEkZzEkdDE3NjY3NzI0OTYkajYwJGwwJGgw&original_referer=https:%2F%2Fnotebooklm.google%23&pli=1',
+                    'x ai': 'https://share.google/MEh9Bu1HjjUeCYzkk',
+                    'z ai': 'https://chat.z.ai/',
+                    'blackbox': 'https://share.google/mDsnda0JNg6dl9cRQ',
+                    'eduaide': 'https://www.eduaide.ai/app/generator',
+                    'edubrain': 'https://edubrain.ai/anatomy-homework-help/',
+                    'bio digital': 'https://human.biodigital.com/explore',
+                    'read ever': 'https://www.readever.app/home?tab=discover',
+                    'google': 'https://google.com'
+                };
+
+                this.initSpeechRecognition();
+                this.micBtn.addEventListener('click', () => this.toggleListening());
+            }
+
+            initSpeechRecognition() {
+                const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+                if (!SpeechRecognition) {
+                    this.status.textContent = 'Speech recognition not supported';
+                    return;
+                }
+
+                this.recognition = new SpeechRecognition();
+                this.recognition.continuous = false;
+                this.recognition.interimResults = false;
+                this.recognition.lang = 'en-IN';
+
+                this.recognition.onstart = () => {
+                    this.isListening = true;
+                    this.micBtn.classList.add('listening');
+                    this.micBtn.textContent = '🔴';
+                    this.status.textContent = 'Listening... Speak now!';
+                };
+
+                this.recognition.onresult = (event) => {
+                    const transcript = event.results[0][0].transcript.toLowerCase().trim();
+                    this.addMessage('You', transcript, 'user-message');
+                    const response = this.processCommand(transcript);
+                    this.speak(response);
+                };
+
+                this.recognition.onend = () => {
+                    this.isListening = false;
+                    this.micBtn.classList.remove('listening');
+                    this.micBtn.textContent = '🎤';
+                    this.status.textContent = 'Click mic to speak';
+                };
+
+                this.recognition.onerror = (event) => {
+                    this.status.textContent = `Error: ${event.error}`;
+                };
+            }
+
+            toggleListening() {
+                if (this.isListening) {
+                    this.recognition.stop();
+                } else {
+                    this.recognition.start();
+                }
+            }
+
+            openWebsite(siteName) {
+                const url = this.websites[siteName];
+                if (url) {
+                    window.open(url, '_blank');
+                    const response = `Opening ${siteName} in a new tab!`;
+                    this.addMessage('Assistant', response, 'web-message');
+                    this.speak(response);
+                }
+            }
+
+            processCommand(text) {
+                if (!text) return 'Sorry, I didn\'t hear anything.';
+
+                // Website opening commands
+                for (let [site, url] of Object.entries(this.websites)) {
+                    if (text.includes('open ' + site) || 
+                        text.includes('go to ' + site) || 
+                        text.includes('visit ' + site) ||
+                        text.includes(site + ' website')) {
+                        window.open(url, '_blank');
+                        return `Opening ${site.replace('-', ' ')} in a new tab!`;
+                    }
+                }
+
+                // Time and date
+                if (text.includes('time') || text.includes('clock')) {
+                    return `The time is ${new Date().toLocaleTimeString('en-IN')}`;
+                }
+                if (text.includes('date') || text.includes('today')) {
+                    return `Today is ${new Date().toLocaleDateString('en-IN', { 
+                        weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' 
+                    })}`;
+                }
+
+                // Greetings
+                if (text.includes('hello') || text.includes('hi') || text.includes('hey')) {
+                    return 'Hello madam garu, what can i do for you';
+                }
+
+                // Name
+                if (text.includes('name') || text.includes('who are you')) {
+                    return 'I am My AI appointed by Your Hubby for your study purpose';
+                }
+
+                // Jokes
+                if (text.includes('joke')) {
+                    const jokes = [
+                        'Why don\'t programmers like nature? It has too many bugs!',
+                        'Why did the computer go to therapy? Too many bytes of emotional baggage!',
+                        'HTTP? It stands for Hyper Text Coffee Pot Control Protocol!'
+                    ];
+                    return jokes[Math.floor(Math.random() * jokes.length)];
+                }
+
+                // Thanks/bye
+                if (text.includes('thank') || text.includes('thanks')) {
+                    return 'You\'re welcome! Try "open github" or "what time"?';
+                }
+                if (text.includes('bye') || text.includes('goodbye')) {
+                    return 'Bye dear, Good Night, hot dreams with me';
+                }
+                
+
+                return `I heard: "${text}"only one time please"!`;
+            }
+
+            speak(text) {
+                const utterance = new SpeechSynthesisUtterance(text);
+                utterance.lang = 'en-IN';
+                utterance.rate = 0.9;
+                utterance.pitch = 1.1;
+                utterance.volume = 0.8;
+
+                utterance.onstart = () => {
+                    this.status.textContent = 'Speaking...';
+                };
+
+                utterance.onend = () => {
+                    this.status.textContent = 'Click mic to speak';
+                };
+
+                this.synthesis.speak(utterance);
+                this.addMessage('Assistant', text, 'web-message');
+            }
+
+            addMessage(sender, text, className) {
+                const messageDiv = document.createElement('div');
+                messageDiv.className = `message ${className}`;
+                messageDiv.innerHTML = `<strong>${sender}:</strong> ${text}`;
+                this.chatDisplay.appendChild(messageDiv);
+                this.chatDisplay.scrollTop = this.chatDisplay.scrollHeight;
+            }
+        }
+
+        // Global function for command buttons
+        function openWebsite(siteName) {
+            window.voiceAssistant.openWebsite(siteName);
+        }
+
+        // Initialize when page loads
+        window.addEventListener('load', () => {
+            window.voiceAssistant = new VoiceAssistant();
+        });
+                  </script>
+
 
   <!-- Resources Section -->
   <section id="resources" class="section">
@@ -160,3 +358,4 @@
   </footer>
 </body>
 </html>
+
