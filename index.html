@@ -46,7 +46,7 @@
     </div>
   </section>  
 
-   <script>
+    <script>
         class VoiceAssistant {
             constructor() {
                 this.recognition = null;
@@ -55,7 +55,6 @@
                 this.status = document.getElementById('status');
                 this.micBtn = document.getElementById('micBtn');
                 this.isListening = false;
-                this.voices = []; // Add voices cache
 
                 // Website mappings
                 this.websites = {
@@ -72,26 +71,12 @@
                     'edub brain': 'https://edubrain.ai/anatomy-homework-help/',
                     'biodigital': 'https://human.biodigital.com/explore',
                     'read ever': 'https://www.readever.app/home?tab=discover',
-                  'pearson': 'https://www.pearson.com/channels/anp/ai-tutor',
+                     'pearson': 'https://www.pearson.com/channels/anp/ai-tutor',
                     'google': 'https://google.com'
                 };
 
-                // Load voices for male voice selection (Chrome async fix)
-                this.loadVoices();
                 this.initSpeechRecognition();
                 this.micBtn.addEventListener('click', () => this.toggleListening());
-            }
-
-            loadVoices() {
-                const loadVoicesOnce = () => {
-                    this.voices = window.speechSynthesis.getVoices();
-                };
-
-                // Chrome needs voiceschanged event
-                if (window.speechSynthesis.onvoiceschanged !== undefined) {
-                    window.speechSynthesis.onvoiceschanged = loadVoicesOnce;
-                }
-                loadVoicesOnce(); // Load immediately too
             }
 
             initSpeechRecognition() {
@@ -155,8 +140,8 @@
 
                 // Website opening commands
                 for (let [site, url] of Object.entries(this.websites)) {
-                    if (text.includes('open ' + site) ||
-                        text.includes('go to ' + site) ||
+                    if (text.includes('open ' + site) || 
+                        text.includes('go to ' + site) || 
                         text.includes('visit ' + site) ||
                         text.includes(site + ' website')) {
                         window.open(url, '_blank');
@@ -169,8 +154,8 @@
                     return `The time is ${new Date().toLocaleTimeString('en-IN')}`;
                 }
                 if (text.includes('date') || text.includes('today')) {
-                    return `Today is ${new Date().toLocaleDateString('en-IN', {
-                        weekday: 'long', year: 'numeric', month: 'long', day: 'numeric'
+                    return `Today is ${new Date().toLocaleDateString('en-IN', { 
+                        weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' 
                     })}`;
                 }
 
@@ -201,6 +186,7 @@
                 if (text.includes('bye') || text.includes('goodbye')) {
                     return 'Bye dear, Good Night, hot dreams with me';
                 }
+                
 
                 return `I heard: "${text}"only one time please"!`;
             }
@@ -208,26 +194,9 @@
             speak(text) {
                 const utterance = new SpeechSynthesisUtterance(text);
                 utterance.lang = 'en-IN';
-                utterance.rate = 0.85;  // Slightly slower for male voice
-                utterance.pitch = 0.8;   // Lower pitch for male voice (was 1.1)
+                utterance.rate = 0.9;
+                utterance.pitch = 1.1;
                 utterance.volume = 0.8;
-
-                // Select male voice automatically
-                if (this.voices.length > 0) {
-                    const maleVoice = this.voices.find(voice => 
-                        voice.lang.startsWith('en-') && (
-                            voice.name.toLowerCase().includes('male') ||
-                            voice.name.includes('David') ||
-                            voice.name.includes('Mark') ||
-                            voice.name.includes('Ravi') ||
-                            !voice.name.toLowerCase().includes('female')
-                        )
-                    ) || this.voices.find(voice => voice.default); // Fallback to default
-
-                    if (maleVoice) {
-                        utterance.voice = maleVoice;
-                    }
-                }
 
                 utterance.onstart = () => {
                     this.status.textContent = 'Speaking...';
@@ -260,9 +229,6 @@
             window.voiceAssistant = new VoiceAssistant();
         });
     </script>
-
-
-
 
   <!-- Resources Section -->
   <section id="resources" class="section">
@@ -392,6 +358,7 @@
   </footer>
 </body>
 </html>
+
 
 
 
