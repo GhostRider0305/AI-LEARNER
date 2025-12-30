@@ -129,14 +129,14 @@
                 const url = this.websites[siteName];
                 if (url) {
                     window.open(url, '_blank');
-                    const response = `Opening ${siteName} in a new tab!`;
+                    const response = `ok boss Opening ${siteName} in a new tab!`;
                     this.addMessage('Assistant', response, 'web-message');
                     this.speak(response);
                 }
             }
 
             processCommand(text) {
-                if (!text) return 'Sorry, I didn\'t hear anything.';
+                if (!text) return 'Sorry boss, I didn\'t hear anything.';
 
                 // Website opening commands
                 for (let [site, url] of Object.entries(this.websites)) {
@@ -145,7 +145,7 @@
                         text.includes('visit ' + site) ||
                         text.includes(site + ' website')) {
                         window.open(url, '_blank');
-                        return `Opening ${site.replace('-', ' ')} in a new tab!`;
+                        return `ok boss Opening ${site.replace('-', ' ')} in a new tab!`;
                     }
                 }
 
@@ -181,7 +181,7 @@
 
                 // Thanks/bye
                 if (text.includes('thank') || text.includes('thanks')) {
-                    return 'You\'re welcome! Try "open github" or "what time"?';
+                    return 'You\'re welcome boss! Try "open github" or "what time"?';
                 }
                 if (text.includes('bye') || text.includes('goodbye')) {
                     return 'Bye dear, Good Night, hot dreams with me';
@@ -358,6 +358,7 @@
   </footer>
 </body>
 </html>
+
 
 
 
