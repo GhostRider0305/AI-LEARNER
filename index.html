@@ -89,7 +89,7 @@
                 this.recognition = new SpeechRecognition();
                 this.recognition.continuous = false;
                 this.recognition.interimResults = false;
-                this.recognition.lang = 'en-IN';
+                this.recognition.lang = 'en-US';
 
                 this.recognition.onstart = () => {
                     this.isListening = true;
@@ -193,7 +193,7 @@
 
             speak(text) {
                 const utterance = new SpeechSynthesisUtterance(text);
-                utterance.lang = 'en-IN';
+                utterance.lang = 'en-US';
                 utterance.rate = 0.9;
                 utterance.pitch = 1.1;
                 utterance.volume = 0.8;
@@ -359,5 +359,6 @@
   </footer>
 </body>
 </html>
+
 
 
