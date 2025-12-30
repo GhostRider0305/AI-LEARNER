@@ -382,7 +382,152 @@ justify-content: center;
 
   .stats {
     padding-inline: 1.5rem;
+  
   }
 }
 
+
+        .container {
+          margin-left: 15%;
+          margin-top: 30px;
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(20px);
+            padding: 2.5rem;
+            border-radius: 24px;
+            box-shadow: 0 25px 45px rgba(0, 0, 0, 0.3);
+            max-width: 500px;
+            width: 70%;
+            height: 30%;
+            text-align: center;
+            justify-content: center;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        h1 {
+            font-size: 2.2rem;
+            margin-bottom: 0.5rem;
+            background: linear-gradient(45deg, #fff, #f0f0f0);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .subtitle {
+            opacity: 0.9;
+            margin-bottom: 2rem;
+            font-size: 1.1rem;
+        }
+
+        .mic-container {
+            position: relative;
+            margin: 2rem 0;
+        }
+
+        #micBtn {
+            width: 120px;
+            height: 120px;
+            border: none;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #ff6b6b, #feca57);
+            color: white;
+            font-size: 3rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 15px 35px rgba(254, 202, 87, 0.4);
+            position: relative;
+            overflow: hidden;
+        }
+
+        #micBtn.listening {
+            background: linear-gradient(135deg, #ff4757, #ff3838);
+            box-shadow: 0 0 40px rgba(255, 71, 87, 0.6);
+            transform: scale(1.1);
+            animation: pulse 1.5s infinite;
+        }
+
+        @keyframes pulse {
+            0% { box-shadow: 0 0 0 0 rgba(255, 71, 87, 0.7); }
+            70% { box-shadow: 0 0 0 25px rgba(255, 71, 87, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(255, 71, 87, 0); }
+        }
+
+        #micBtn:hover:not(.listening) {
+            transform: scale(1.05);
+            box-shadow: 0 20px 40px rgba(254, 202, 87, 0.5);
+        }
+
+        .status {
+            margin: 1.5rem 0;
+            font-size: 1.1rem;
+            min-height: 1.5rem;
+        }
+
+        .chat-display {
+            background: rgba(255, 255, 255, 0.15);
+            border-radius: 16px;
+            padding: 1.5rem;
+            margin: 1.5rem 0;
+            max-height: 300px;
+            overflow-y: auto;
+            text-align: left;
+            backdrop-filter: blur(10px);
+        }
+
+        .message {
+            margin: 1rem 0;
+            padding: 1rem;
+            border-radius: 12px;
+            animation: fadeIn 0.3s ease;
+        }
+
+        .user-message {
+            background: rgba(255, 255, 255, 0.25);
+            margin-left: 20%;
+            border-bottom-left-radius: 4px;
+        }
+
+        .bot-message {
+            background: rgba(0, 0, 0, 0.3);
+            margin-right: 20%;
+            border-bottom-right-radius: 4px;
+        }
+
+        .web-message {
+            background: linear-gradient(135deg, #00c9ff, #92fe9d) !important;
+            border-left: 4px solid #00f5ff;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .commands {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 1rem;
+            margin-top: 1.5rem;
+        }
+
+        .command {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 0.8rem;
+            border-radius: 12px;
+            font-size: 0.9rem;
+            opacity: 0.9;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .command:hover {
+            background: rgba(255, 255, 255, 0.2);
+            transform: translateY(-2px);
+        }
+
+        @media (max-width: 480px) {
+            .container { padding: 2rem 1.5rem; }
+            h1 { font-size: 1.8rem; }
+            #micBtn { width: 100px; height: 100px; font-size: 2.5rem; }
+        }
 
